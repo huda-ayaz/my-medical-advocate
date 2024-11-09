@@ -8,11 +8,11 @@ db_path = os.path.join(os.path.dirname(__file__), 'faq_database.db')
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
-# Query all entries in the Questions table
+# Query all rows to see which ones are present
 cursor.execute('SELECT * FROM Questions')
 rows = cursor.fetchall()
 
-# Display results
+# Print each row
 for row in rows:
     print(row)
 
