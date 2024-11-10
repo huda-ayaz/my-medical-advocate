@@ -1,13 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function Resources() {
+  useEffect(() => {
+    // Function to load Botpress webchat scripts dynamically
+    const loadBotpressWebchat = () => {
+      // Load the inject.js script
+      const injectScript = document.createElement('script');
+      injectScript.src = 'https://cdn.botpress.cloud/webchat/v2.2/inject.js';
+      injectScript.async = true;
+      document.body.appendChild(injectScript);
+
+      // Load the specific configuration script
+      const configScript = document.createElement('script');
+      configScript.src = 'https://files.bpcontent.cloud/2024/11/10/01/20241110013216-3796VWKD.js';
+      configScript.async = true;
+      document.body.appendChild(configScript);
+
+      // Initialize Botpress Webchat after injectScript loads
+      injectScript.onload = () => {
+        if (window.botpressWebChat) {
+          window.botpressWebChat.init();
+        }
+      };
+    };
+
+    // Load Botpress webchat when component mounts
+    loadBotpressWebchat();
+
+    // Cleanup: Remove scripts and close the webchat on unmount
+    return () => {
+      // Remove the injected scripts
+      const injectScript = document.querySelector('script[src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"]');
+      const configScript = document.querySelector('script[src="https://files.bpcontent.cloud/2024/11/10/01/20241110013216-3796VWKD.js"]');
+      if (injectScript) document.body.removeChild(injectScript);
+      if (configScript) document.body.removeChild(configScript);
+
+      // Close the webchat if it is open
+      if (window.botpressWebChat) {
+        window.botpressWebChat.close();
+      }
+    };
+  }, []);
+
   return (
     <div className="flex flex-col items-center p-6 min-h-screen">
       {/* Welcome Message */}
-      <h1 className="text-3xl font-bold text-[#402909] mb-2">Welcome to CareCompass Resources</h1>
+      <h1 className="text-3xl font-bold text-[#402909] mb-2">Welcome to CareCompass</h1>
       <p className="text-lg text-gray-700 text-center max-w-2xl mb-8">
         Here you'll find valuable information to help you better understand breast cancer and advocate for your rights. 
         Select a category below to explore resources tailored to your needs.
+        Or, chat with our virtual assistant for personalized support.
       </p>
 
       {/* Resource Categories */}
